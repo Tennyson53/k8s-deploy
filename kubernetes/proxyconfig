@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Config
+users:
+- name: kubeproxy
+  user:
+    client-certificate: /etc/kubernetes/ca_file/node/kubelet.crt
+    client-key: /etc/kubernetes/ca_file/node/kubelet.key
+clusters:
+- cluster:
+    certificate-authority: /etc/kubernetes/ca_file/master/ca.crt
+  name: enn-cluster
+contexts:
+- context:
+    cluster: enn-cluster
+    user: kubeproxy
+  name: proxy-context
+current-context: proxy-context

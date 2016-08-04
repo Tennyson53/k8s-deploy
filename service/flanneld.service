@@ -1,0 +1,14 @@
+[Unit]
+After=network-online.target etcd.service
+Wants=network-online.target
+Description=flannel is an etcd backed overlay network for containers
+
+[Service]
+Type=notify
+EnvironmentFile=-/etc/flanneld/flanneld.conf
+ExecStart=/usr/local/bin/flanneld --etcd-endpoints=${FLANNEL_ETCD} --etcd-prefix=${FLANNEL_ETCD_KEY} $FLANNEL_OPTIONS
+ExecStartPost=/usr/local/bin/mk-docker-opts.sh -i
+ExecStartPost=source /run/flannel/subnet.env
+
+[Install]
+WantedBy=multi-user.target
